@@ -11,7 +11,7 @@ Information as of `r report_date`
 # Load libraries ----------------------------------------------------------
 
 library(tidyverse)
-library(googlesheets)
+#library(googlesheets)
 library(readxl)
 
 # read_name_file <- params$read_name_file
@@ -41,7 +41,7 @@ read_xlsx(read_path_name_file,
           na = "",
           sheet = die,
           range = paste0("A1:A", rolls + 5)) %>% 
-  filter(D20 %in% c(1:die_sides)) %>% 
+  filter(as.integer(D20) %in% c(1:die_sides)) %>% 
   write_csv(paste0(write_path, die, ".csv")) %>%
   nrow() -> responses_num_d20
 
@@ -59,7 +59,7 @@ read_xlsx(read_path_name_file,
           na = "",
           sheet = die,
           range = paste0("A1:A", rolls + 5)) %>% 
-  filter(D12 %in% c(1:die_sides)) %>% 
+  filter(as.integer(D12) %in% c(1:die_sides)) %>% 
   write_csv(paste0(write_path, die, ".csv")) %>%
   nrow() -> responses_num_d12
 
@@ -77,7 +77,7 @@ read_xlsx(read_path_name_file,
           na = "",
           sheet = die,
           range = paste0("A1:A", rolls + 5)) %>% 
-  filter(D10 %in% c(1:die_sides)) %>% 
+  filter(as.integer(D10) %in% c(1:die_sides)) %>% 
   write_csv(paste0(write_path, die, ".csv")) %>%
   nrow() -> responses_num_d10
 
@@ -95,7 +95,7 @@ read_xlsx(read_path_name_file,
           na = "",
           sheet = die,
           range = paste0("A1:A", rolls + 5)) %>% 
-  filter(D8 %in% c(1:die_sides)) %>% 
+  filter(as.integer(D8) %in% c(1:die_sides)) %>% 
   write_csv(paste0(write_path, die, ".csv")) %>%
   nrow() -> responses_num_d8
 
@@ -113,7 +113,7 @@ read_xlsx(read_path_name_file,
           na = "",
           sheet = die,
           range = paste0("A1:A", rolls + 5)) %>% 
-  filter(D6 %in% c(1:die_sides)) %>% 
+  filter(as.integer(D6) %in% c(1:die_sides)) %>% 
   write_csv(paste0(write_path, die, ".csv")) %>%
   nrow() -> responses_num_d6
 
@@ -131,7 +131,7 @@ read_xlsx(read_path_name_file,
           na = "",
           sheet = die,
           range = paste0("A1:A", rolls + 5)) %>% 
-  filter(D4 %in% c(1:die_sides)) %>% 
+  filter(as.integer(D4) %in% c(1:die_sides)) %>% 
   write_csv(paste0(write_path, die, ".csv")) %>%
   nrow() -> responses_num_d4
 
@@ -143,7 +143,7 @@ read_xlsx(read_path_name_file,
 
 **`r responses_num`** responses recorded for analysis, 
 
-Responses were saved as "`r write_path_name_file`" 
+Responses were saved as .csv files 
 
 
 

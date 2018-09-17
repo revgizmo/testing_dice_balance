@@ -155,12 +155,12 @@ die_sides = 4
 d4 %>% 
   saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
 
-rm(list = c("apply_factors",
-            "get_legend",
-            "levels_all",
-
-            "wrapper",
-            "y_labs"))
+# rm(list = c("apply_factors",
+#             "get_legend",
+#             "levels_all",
+# 
+#             "wrapper",
+#             "y_labs"))
 
 # print("02_Tidy")
 tidy_warnings <- warnings()

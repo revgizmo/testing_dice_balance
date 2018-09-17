@@ -30,8 +30,6 @@ library(tidyverse)
 
 
 # Load the tidy-ed data ----
-report <- readRDS("data/tidy.rds")
-report_column_headers <- readRDS("data/column_headers_tidy.rds")
 
 #D20
 die_sides = 20

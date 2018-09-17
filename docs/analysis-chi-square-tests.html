@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Test dice for balance</title>
+  <meta name="description" content="This is a project to test dice for balance based on rolls and expected values">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Test dice for balance" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a project to test dice for balance based on rolls and expected values" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Test dice for balance" />
+  
+  <meta name="twitter:description" content="This is a project to test dice for balance based on rolls and expected values" />
+  
+
+<meta name="author" content="Conor Healy">
+
+
+<meta name="date" content="2018-09-15">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="analysis-histograms.html">
+<link rel="next" href="analysis-clean-up-and-print-final-notes.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Title Analysis</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#this-is-the-full-analysis-of-the-title"><i class="fa fa-check"></i><b>1.1</b> This is the full analysis of the Title</a></li>
+</ul></li>
+<li class="part"><span><b>I Prepare the data</b></span></li>
+<li class="chapter" data-level="2" data-path="import-raw-files.html"><a href="import-raw-files.html"><i class="fa fa-check"></i><b>2</b> Import raw files</a><ul>
+<li class="chapter" data-level="2.1" data-path="import-raw-files.html"><a href="import-raw-files.html#import-title-data"><i class="fa fa-check"></i><b>2.1</b> Import Title data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="tidy-the-data.html"><a href="tidy-the-data.html"><i class="fa fa-check"></i><b>3</b> Tidy the data</a><ul>
+<li class="chapter" data-level="3.1" data-path="tidy-the-data.html"><a href="tidy-the-data.html#tidy-title-data"><i class="fa fa-check"></i><b>3.1</b> Tidy Title data</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="tidy-the-data.html"><a href="tidy-the-data.html#datawrangle"><i class="fa fa-check"></i><b>3.1.1</b> DataWrangle</a></li>
+<li class="chapter" data-level="3.1.2" data-path="tidy-the-data.html"><a href="tidy-the-data.html#tidy---clean-up-and-print-final-notes"><i class="fa fa-check"></i><b>3.1.2</b> Tidy - Clean up and print final notes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="transform-the-files-for-analysis.html"><a href="transform-the-files-for-analysis.html"><i class="fa fa-check"></i><b>4</b> Transform the files for analysis</a><ul>
+<li class="chapter" data-level="4.1" data-path="transform-the-files-for-analysis.html"><a href="transform-the-files-for-analysis.html#transform-title"><i class="fa fa-check"></i><b>4.1</b> Transform Title</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="transform-the-files-for-analysis.html"><a href="transform-the-files-for-analysis.html#cleanup"><i class="fa fa-check"></i><b>4.1.1</b> Cleanup</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Analysis of Title</b></span></li>
+<li class="chapter" data-level="5" data-path="analyze-title.html"><a href="analyze-title.html"><i class="fa fa-check"></i><b>5</b> Analyze Title</a><ul>
+<li class="chapter" data-level="5.1" data-path="analyze-title.html"><a href="analyze-title.html#analysis-of-title---subtitle"><i class="fa fa-check"></i><b>5.1</b> Analysis of Title - subtitle</a></li>
+<li class="chapter" data-level="5.2" data-path="analyze-title.html"><a href="analyze-title.html#combined-rolls-analysis---load-responses"><i class="fa fa-check"></i><b>5.2</b> Combined Rolls Analysis - load responses</a></li>
+<li class="chapter" data-level="5.3" data-path="analyze-title.html"><a href="analyze-title.html#analysis-of-dice-rolls"><i class="fa fa-check"></i><b>5.3</b> Analysis of Dice Rolls</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="analysis-histograms.html"><a href="analysis-histograms.html"><i class="fa fa-check"></i><b>6</b> Analysis - Histograms</a><ul>
+<li class="chapter" data-level="6.1" data-path="analysis-histograms.html"><a href="analysis-histograms.html#generate-histogramsbar-charts-for-all-categorical-variables-factors-and-select-additional-columns"><i class="fa fa-check"></i><b>6.1</b> Generate Histograms/Bar Charts for all categorical variables (Factors) and select additional columns</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="analysis-chi-square-tests.html"><a href="analysis-chi-square-tests.html"><i class="fa fa-check"></i><b>7</b> Analysis - Chi-Square Tests</a><ul>
+<li class="chapter" data-level="7.1" data-path="analysis-chi-square-tests.html"><a href="analysis-chi-square-tests.html#pairwise-comparisons-of-key-variables-overall_satisfaction"><i class="fa fa-check"></i><b>7.1</b> Pairwise comparisons of key variables Overall_Satisfaction</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="analysis-clean-up-and-print-final-notes.html"><a href="analysis-clean-up-and-print-final-notes.html"><i class="fa fa-check"></i><b>8</b> Analysis - Clean up and print final notes</a><ul>
+<li class="chapter" data-level="8.1" data-path="analysis-clean-up-and-print-final-notes.html"><a href="analysis-clean-up-and-print-final-notes.html#end"><i class="fa fa-check"></i><b>8.1</b> End</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Test dice for balance</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="analysis---chi-square-tests" class="section level1">
+<h1><span class="header-section-number">7</span> Analysis - Chi-Square Tests</h1>
+<pre><code>##  [1] 27 32 28 30 30 35 31 25 35 23 35 27 30 32 31 31 23 33 33 29</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  d20 %&gt;% count(D20) %&gt;% .$n
+## X-squared = 8.3333, df = 19, p-value = 0.983</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  d12 %&gt;% count(D12) %&gt;% .$n
+## X-squared = 14, df = 11, p-value = 0.233</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  d10 %&gt;% count(D10) %&gt;% .$n
+## X-squared = 12, df = 9, p-value = 0.2133</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  d8 %&gt;% count(D8) %&gt;% .$n
+## X-squared = 7.2, df = 7, p-value = 0.4084</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  d6 %&gt;% count(D6) %&gt;% .$n
+## X-squared = 5.6, df = 5, p-value = 0.3471</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  d4 %&gt;% count(D4) %&gt;% .$n
+## X-squared = 0.3, df = 3, p-value = 0.96</code></pre>
+<pre><code>## 
+##  Two-sample Kolmogorov-Smirnov test
+## 
+## data:  d20 %&gt;% count(D20) %&gt;% .$n and runif(2e+06, 1, 20)
+## D = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: two-sided</code></pre>
+<pre><code>## 
+##  Two-sample Kolmogorov-Smirnov test
+## 
+## data:  x and y
+## D = 0.46, p-value = 0.0004387
+## alternative hypothesis: two-sided</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  x + 2
+## D = 0.39121, p-value = 2.097e-07
+## alternative hypothesis: two-sided</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  x + 2
+## D = 0.39121, p-value = 4.514e-07
+## alternative hypothesis: two-sided</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  x + 2
+## D^+ = 0.058361, p-value = 0.6851
+## alternative hypothesis: the CDF of x lies above the null hypothesis</code></pre>
+<pre><code>##  [1] 17.364646 10.271387 19.357994 14.519418 16.116524 19.511469 14.581653
+##  [8]  9.667917  7.612631  1.821255  7.048138  8.278480  7.252236 19.370962
+## [15]  2.968693 11.593901 11.503118 17.247389 15.704961 11.157071</code></pre>
+<pre><code>## [1] 0.05263158</code></pre>
+<pre><code>## [1] 0.08288211</code></pre>
+<div id="pairwise-comparisons-of-key-variables-overall_satisfaction" class="section level2">
+<h2><span class="header-section-number">7.1</span> Pairwise comparisons of key variables Overall_Satisfaction</h2>
+<!-- Clean up Pairwise calcs ------------------------------------------------- -->
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="analysis-histograms.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="analysis-clean-up-and-print-final-notes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/revgizmo/testing_dice_balance/edit/master/04_Analyse.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
