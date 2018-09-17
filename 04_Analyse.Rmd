@@ -1,0 +1,255 @@
+# (PART) Analysis of Title {-}
+
+#Analyze Title
+
+Information as of `r report_date`
+
+##Analysis of Title - \newline subtitle
+
+```{r combined_Load, dependson = "Transform", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Load libraries ----------------------------------------------------------
+
+library(tidyverse)
+library(tm)
+library(RColorBrewer)
+library(wordcloud)
+library(gridExtra)
+library(ggalluvial)
+library(NPS)
+
+
+# Load Values objects for assignment and filtering ------------------------
+
+source("./Values.R")
+source("./functions.R")
+
+
+# Initialize an empty list to store the results ----
+results <- list()
+
+
+# set parameters & global values ----
+
+output_folder <- "output"
+
+my_fill_color <- brewer.pal(4, "Blues")[3] #for histograms, etc.
+
+#for plots and graphs
+my_theme <- theme(
+  panel.background = element_blank(),
+  axis.line = element_line(size = .5)
+)
+
+
+
+# Load the transformed data ----
+
+report <- readRDS("data/combined_rolls.rds")
+
+report_names_class <- tibble( "names" = names(report), "class" = map(report, class))
+
+```
+
+
+
+##Combined Rolls Analysis - load responses
+
+```{r convert_report_to_combined, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Convert report  ------------------------------------------
+
+report_info <- paste0( "results from Title (n = ", nrow(report), ")")
+if (report_info != "") {report_info <- paste0( report_info, " ")}
+
+name_token <- "combined"
+if (name_token != "") {name_token <- paste0( name_token, "_")}
+
+
+#special columns that aren't factors by should be included in charts/grapsh, etc.
+special_cols <- c( 1:2)
+
+report_names_class %>%
+  rownames_to_column() %>%
+  mutate(special_cols = rowname %in% special_cols,
+         col_num_name = paste0(rowname, " - ", names)
+         ) %>%
+  filter(special_cols == T) %>%
+  .$col_num_name
+
+
+report_responses_num <- 0
+# report_responses_num <- report %>% nrow()
+
+```
+
+**`r report_responses_num`** responses were loaded for analysis.
+
+
+
+
+##Analysis of Dice Rolls
+
+
+#### Thoughts
+* Thoughts go here
+
+
+
+
+#Analysis - Histograms
+
+##Generate Histograms/Bar Charts for all categorical variables (Factors) and select additional columns
+
+```{r combined_Histograms, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Histograms -------------------------------------------------
+
+#apply factor levels to all columns that fit within each levels values
+
+
+#for (i in 122) {
+#for (i in 27) {
+for (i in 1:ncol(report)) {
+
+  if ( is.factor(report[[i]]) | i %in% special_cols ) {
+
+    x_col <- report %>%
+      select(i) %>%
+      names(.) %>%
+      str_replace_all("/", "")
+
+    x_col_trim <- x_col %>%
+      strtrim(25)
+
+    y_lim_max <- report %>%
+      count(.[[i]]) %>%
+      mutate(max = max(n)) %>%
+      count(max) %>%
+      .$max * 1.05
+
+    y_breaks <- (y_lim_max / 4 * 1:4) %/% 25 * 25
+
+    x_plot <- report %>%
+      ggplot(mapping = aes(x = report[[i]])) +
+      geom_bar(fill = my_fill_color) +
+      geom_text(stat = "count", aes(label = ..count.., y = ..count..), vjust = -1) +
+      scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+      scale_y_continuous(limit = c(0, y_lim_max), breaks = y_breaks) +
+      my_theme +
+      labs(x = x_col_trim,
+          title = wrapper(paste0( i, " - ", x_col, " (n = ", nrow(report), ")"), 90),
+          caption = report_info
+      )
+    # ggsave(paste0(output_folder, "/", name_token, i, "report_histogram_", str_replace_all(x_col_trim, pattern = "/", replacement = ""), ".png"))
+
+    print(x_plot)
+    print(paste0( i, " - ", x_col))
+  }
+}
+
+rm(list = c("x_col",
+            "x_col_trim",
+            "x_plot",
+            "y_breaks" ))
+
+report %>%
+  ggplot(mapping = aes(x = rolls)) +
+  geom_bar(fill = my_fill_color) +
+  facet_wrap(~die, nrow = 3)
+
+
+```
+
+
+
+#Analysis - Chi-Square Tests
+
+```{r combined_pairwise_proportions, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# chisq.test -----------------------------------------------
+
+d20 %>% count(D20) %>% .$n
+chisq.test(d20 %>% count(D20) %>% .$n)
+chisq.test(d12 %>% count(D12) %>% .$n)
+chisq.test(d10 %>% count(D10) %>% .$n)
+chisq.test(d8 %>% count(D8) %>% .$n)
+chisq.test(d6 %>% count(D6) %>% .$n)
+chisq.test(d4 %>% count(D4) %>% .$n)
+
+ks.test(d20 %>% count(D20) %>% .$n, runif(2000000, 1, 20))
+
+x <- rnorm(50)
+y <- runif(30)
+# Do x and y come from the same distribution?
+ks.test(x, y)
+# Does x come from a shifted gamma distribution with shape 3 and rate 2?
+ks.test(x+2, "pgamma", 3, 2) # two-sided, exact
+ks.test(x+2, "pgamma", 3, 2, exact = FALSE)
+ks.test(x+2, "pgamma", 3, 2, alternative = "gr")
+runif(20, 1, 20)
+dunif(20, 1, 20)
+var(runif(10000))  #- ~ = 1/12 = .08333
+
+```
+
+
+
+##Pairwise comparisons of key variables Overall_Satisfaction
+
+```{r combined_pairwise_Overall_Satisfaction, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+
+# Pairwise by Overall_Satisfaction -----------------------------------------------------------
+
+# plot_calc_pairs(df = report, x = Column, y3 = Overall_Satisfaction, ex_label = '')
+
+
+```
+
+
+
+
+<!-- Clean up Pairwise calcs ------------------------------------------------- -->
+
+```{r combined_pairwise_clean_up, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# 
+# # Clean up Pairwise calcs -------------------------------------------------
+# 
+# rm(list = c("plot_calc_Completed_Quarter",
+#             "plot_calc_LTR",
+#             "plot_calc_NPS",
+#             "plot_calc_OSAT",
+#             "plot_calc_Relationship_Officer",
+#             "plot_calc_report_Phase",
+#             "report_rm"))
+
+
+```
+
+
+
+
+
+#Analysis - Clean up and print final notes
+
+```{r combined_final, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Clean up and print final notes ------------------------------------------
+
+# rm(list = c("i",
+#             "j",
+#             "my_fill_color",
+#             "my_theme",
+#             "name_token",
+#             "output_folder",
+#             ))
+# 
+# print("04_Analyse")
+# warnings()
+```
+
+
+
+##End

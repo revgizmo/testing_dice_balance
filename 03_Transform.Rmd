@@ -1,0 +1,133 @@
+#Transform the files for analysis
+
+Information as of `r report_date`
+
+
+
+##Transform Title
+
+```{r Transform, dependson = "Tidy_final", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# ### 03_Transform.R ----------------------------------------------------------
+#
+# This script is for data transforming. It will contain all transformations of the data to make them ready for analyses.
+# Some "destructive" data management can occur here, such as dropping variables or observations, or modifying the levels of some factors.
+# Useful packages here are `forcats`, `lubridate`, and `stringr`.
+#
+# The results are saved in a **Data/transformed.rds** file.
+
+# Load the tidy-ed data
+#readRDS("Data/tidy.rds") %>%
+# Transform the data
+
+# Save the transformed data
+# saveRDS("Data/transformed.rds")
+
+# Load libraries ----------------------------------------------------------
+
+library(tidyverse)
+
+
+
+# Load the tidy-ed data ----
+report <- readRDS("data/tidy.rds")
+report_column_headers <- readRDS("data/column_headers_tidy.rds")
+
+#D20
+die_sides = 20
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".rds")
+d20 <- readRDS(read_path_name)
+
+
+#D12
+die_sides = 12
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".rds")
+d12 <- readRDS(read_path_name)
+
+
+#D10
+die_sides = 10
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".rds")
+d10 <- readRDS(read_path_name)
+
+
+#D8
+die_sides = 8
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".rds")
+d8 <- readRDS(read_path_name)
+
+
+#D6
+die_sides = 6
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".rds")
+d6 <- readRDS(read_path_name)
+
+
+#D4
+die_sides = 4
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".rds")
+d4 <- readRDS(read_path_name)
+
+
+# Transform the data ----
+
+combined_rolls <- d20 %>% gather()
+combined_rolls <- d12 %>% gather() %>% bind_rows(combined_rolls)
+combined_rolls <- d10 %>% gather() %>% bind_rows(combined_rolls)
+combined_rolls <- d8 %>% gather() %>% bind_rows(combined_rolls)
+combined_rolls <- d6 %>% gather() %>% bind_rows(combined_rolls)
+combined_rolls <- d4 %>% gather() %>% bind_rows(combined_rolls)
+combined_rolls <- combined_rolls %>% 
+  rename(die = key,
+         rolls = value)
+
+
+combined_rolls %>% 
+  count(die) %>% 
+  knitr::kable()
+
+
+# Save the transformed data ----
+combined_rolls %>%
+  saveRDS(file = "data/combined_rolls.rds")
+
+
+
+# print("03_Transform")
+# warnings()
+
+
+
+report_responses_num <- 0
+# report_responses_num <- report %>% nrow()
+report_response_earliest <- 0
+# report_response_earliest <- min(parse_datetime(report[["Completed_Date"]], "%m/%d/%Y %H:%M:%S %p" ))
+report_response_latest <- 0
+# report_response_latest <- max(parse_datetime(report[["Completed_Date"]], "%m/%d/%Y %H:%M:%S %p" ))
+
+
+
+```
+
+**`r report_responses_num`** responses were prepared for analysis.
+Responses range from **`r report_response_earliest`** to **`r report_response_latest`**.
+
+
+
+
+###Cleanup
+
+```{r Transform_cleanup, dependson = "Transform", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+
+
+# rm(list = c("report"))
+
+transform_warnings <- warnings()
+
+
+
+```
+
+There were **`r length(transform_warnings)`** warnings during the transforms. They were:
+`r transform_warnings` 

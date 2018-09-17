@@ -1,0 +1,176 @@
+#Tidy the data
+
+Information as of `r report_date`
+
+
+
+
+##Tidy Title data
+
+Run Tidy on Title
+
+```{r Tidy_Load, dependson = "Import", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+report_date <- params$report_date
+
+# ### 02_Tidy.R ----------------------------------------------------------
+#
+# This step consists mostly of "non-destructive" data management: assign types
+# to columns (factors with correct/human readable levels, dates, etc.),
+# correct/censor obviously abnormal values and errors), transform between *long*
+# and *wide* format, etc. Useful packages here are `lubridate`, `stringr`, and
+# `forcats`.
+#
+# The results are saved in a **Data/tidy.rds** file.
+#
+# After this second step, you will have your full data ready to use in R and
+# shouldn't have to run the first two steps anymore (unless you get hold of new
+# data).
+
+# Load
+
+# read_csv("data/.csv") %>%
+# select() %>%
+# filter() %>%
+# mutate() %>%
+# dmap_if(is.character, factor) %>%
+#
+# #Save the tidy-ed data
+# saveRDS(file = "data/tidy.rds")
+
+
+# Load libraries ----------------------------------------------------------
+
+library(tidyverse)
+
+
+# Load data and calculate columns -------------------------------------------------
+
+if (!exists("report_date")) {
+  report_date <- "2018-06-11"
+  }
+
+read_path <- "./data/"
+read_name_start <- "D"
+
+
+# Load data
+
+
+#D20
+die_sides = 20
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".csv")
+d20 <- read_csv(read_path_name,
+                 na = "NA",
+                 guess_max = 10000)
+
+
+#D12
+die_sides = 12
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".csv")
+d12 <- read_csv(read_path_name,
+                 na = "NA",
+                 guess_max = 10000)
+
+
+#D10
+die_sides = 10
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".csv")
+d10 <- read_csv(read_path_name,
+                 na = "NA",
+                 guess_max = 10000)
+
+
+#D8
+die_sides = 8
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".csv")
+d8 <- read_csv(read_path_name,
+                 na = "NA",
+                 guess_max = 10000)
+
+
+#D6
+die_sides = 6
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".csv")
+d6 <- read_csv(read_path_name,
+                 na = "NA",
+                 guess_max = 10000)
+
+
+#D4
+die_sides = 4
+read_path_name <- paste0(read_path, read_name_start, die_sides, ".csv")
+d4 <- read_csv(read_path_name,
+                 na = "NA",
+                 guess_max = 10000)
+
+
+
+
+
+```
+
+
+
+
+
+###DataWrangle
+
+Data tidying was handled during Import (dice roll detail values were selected from within a more comprehensive spreadsheet that included summaries and analysis).  Traditional datawrangling was not necessary.
+
+
+###Tidy - Clean up and print final notes
+
+```{r Tidy_final, dependson = "Tidy_target", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+
+#Save the tidy-ed data ----
+#D20
+die_sides = 20
+d20 %>% 
+  saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
+
+#D12
+die_sides = 12
+d12 %>% 
+  saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
+
+#D10
+die_sides = 10
+d10 %>% 
+  saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
+
+#D8
+die_sides = 8
+d8 %>% 
+  saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
+
+#D6
+die_sides = 6
+d6 %>% 
+  saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
+
+#D4
+die_sides = 4
+d4 %>% 
+  saveRDS(file = paste0(read_path, read_name_start, die_sides, ".rds"))
+
+rm(list = c("apply_factors",
+            "get_legend",
+            "levels_all",
+
+            "wrapper",
+            "y_labs"))
+
+# print("02_Tidy")
+tidy_warnings <- warnings()
+
+
+```
+
+
+Responses were saved as "tidy.rds"
+
+
+There were **`r length(tidy_warnings)`** warnings during the data tidying.  They were:
+`r tidy_warnings` 

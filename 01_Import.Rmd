@@ -1,0 +1,179 @@
+# (PART) Prepare the data {-}
+
+#Import raw files
+
+Information as of `r report_date`
+
+##Import Title data
+
+```{r Import, cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Load libraries ----------------------------------------------------------
+
+library(tidyverse)
+library(googlesheets)
+library(readxl)
+
+# read_name_file <- params$read_name_file
+
+# Import the raw data in csv ----
+
+read_path <- "./data/raw/"
+write_path <- "./data/"
+
+
+
+
+read_path_name_file <- paste0(read_path, read_name_file)
+
+responses_num <- 0
+
+#D20
+die_sides = 20
+die <- paste0("D", die_sides)
+rolls <- read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = "D1:D2") %>% 
+  .[[1]]
+  
+read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = paste0("A1:A", rolls + 5)) %>% 
+  filter(D20 %in% c(1:die_sides)) %>% 
+  write_csv(paste0(write_path, die, ".csv")) %>%
+  nrow() -> responses_num_d20
+
+
+#D12
+die_sides = 12
+die <- paste0("D", die_sides)
+rolls <- read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = "D1:D2") %>% 
+  .[[1]]
+  
+read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = paste0("A1:A", rolls + 5)) %>% 
+  filter(D12 %in% c(1:die_sides)) %>% 
+  write_csv(paste0(write_path, die, ".csv")) %>%
+  nrow() -> responses_num_d12
+
+
+#D10
+die_sides = 10
+die <- paste0("D", die_sides)
+rolls <- read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = "D1:D2") %>% 
+  .[[1]]
+  
+read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = paste0("A1:A", rolls + 5)) %>% 
+  filter(D10 %in% c(1:die_sides)) %>% 
+  write_csv(paste0(write_path, die, ".csv")) %>%
+  nrow() -> responses_num_d10
+
+
+#D8
+die_sides = 8
+die <- paste0("D", die_sides)
+rolls <- read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = "D1:D2") %>% 
+  .[[1]]
+  
+read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = paste0("A1:A", rolls + 5)) %>% 
+  filter(D8 %in% c(1:die_sides)) %>% 
+  write_csv(paste0(write_path, die, ".csv")) %>%
+  nrow() -> responses_num_d8
+
+
+#D6
+die_sides = 6
+die <- paste0("D", die_sides)
+rolls <- read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = "D1:D2") %>% 
+  .[[1]]
+  
+read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = paste0("A1:A", rolls + 5)) %>% 
+  filter(D6 %in% c(1:die_sides)) %>% 
+  write_csv(paste0(write_path, die, ".csv")) %>%
+  nrow() -> responses_num_d6
+
+
+#D4
+die_sides = 4
+die <- paste0("D", die_sides)
+rolls <- read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = "D1:D2") %>% 
+  .[[1]]
+  
+read_xlsx(read_path_name_file,
+          na = "",
+          sheet = die,
+          range = paste0("A1:A", rolls + 5)) %>% 
+  filter(D4 %in% c(1:die_sides)) %>% 
+  write_csv(paste0(write_path, die, ".csv")) %>%
+  nrow() -> responses_num_d4
+
+#print(paste0(responses_num, " responses recorded for analysis, saved as ", write_path_name_responses))
+
+
+
+```
+
+**`r responses_num`** responses recorded for analysis, 
+
+Responses were saved as "`r write_path_name_file`" 
+
+
+
+```{r Import_cleanup, cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+# rm(list = c("name_invitations_day",
+#             "name_invitations_month",
+#             "name_invitations_year",
+#             "name_responses_day",
+#             "name_responses_month",
+#             "name_responses_year",
+#             "read_name_invitations",
+#             "read_name_responses",
+#             "read_path",
+#             "read_path_name_invitations",
+#             "read_path_name_responses",
+#             "write_name_start",
+#             "write_path",
+#             "write_path_name_invitations",
+#             "write_path_name_responses",
+#             "invitations_num",
+#             "responses_num"))
+
+#print("01_Import")
+import_warnings <- warnings()
+
+```
+
+There were **`r length(import_warnings)`** warnings during the import.  They were:
+`r import_warnings` 
+
+
+
+

@@ -1,0 +1,32 @@
+--- 
+title: "Test dice for balance"
+author: "Conor Healy"
+date: "`r params$report_date`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "This is a project to test dice for balance based on rolls and expected values"
+params:
+  report_date: '2018-09-15'
+  read_name_file: steel_cube.xlsx
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+
+report_date <- params$report_date
+read_name_file <- params$read_name_file
+
+
+
+```
+
+#Title Analysis
+##This is the full analysis of the Title
+
+Information as of `r report_date`
