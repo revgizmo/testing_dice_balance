@@ -11,6 +11,7 @@ Information as of `r report_date`
 # Load libraries ----------------------------------------------------------
 
 library(tidyverse)
+library(broom)
 library(tm)
 library(RColorBrewer)
 library(wordcloud)
@@ -78,7 +79,7 @@ report_names_class %>%
   .$col_num_name
 
 
-report_responses_num <- 0
+report_responses_num <- nrow(report)
 # report_responses_num <- report %>% nrow()
 
 ```
@@ -167,29 +168,31 @@ report %>%
 
 ```{r combined_pairwise_proportions, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
-# chisq.test -----------------------------------------------
 
-d20 %>% count(D20) %>% .$n
-chisq.test(d20 %>% count(D20) %>% .$n)
-chisq.test(d12 %>% count(D12) %>% .$n)
-chisq.test(d10 %>% count(D10) %>% .$n)
-chisq.test(d8 %>% count(D8) %>% .$n)
-chisq.test(d6 %>% count(D6) %>% .$n)
-chisq.test(d4 %>% count(D4) %>% .$n)
+chisq <- report %>% 
+  count(die,rolls) %>% 
+  nest(-die) %>%
+  mutate(test = map(data, ~ chisq.test(.$n)), # S3 list-col
+    tidied = map(test, tidy)) %>% 
+  unnest(tidied, .drop = TRUE) %>% 
+  mutate(chisq_result_0.05 = if_else(p.value < 0.05, "Significant Difference", "Ok"),
+         test = round(p.value,2)
+         )
 
-ks.test(d20 %>% count(D20) %>% .$n, runif(2000000, 1, 20))
+summary <- report %>%
+  group_by(die) %>% 
+  summarize(roll_num = n(),
+            roll_mean = mean(rolls)) %>% 
+  mutate(sides = as.integer(sub("D","",die)),
+         expected_rolls_per_side = roll_num/sides,
+         expected_mean = sides/2) %>% 
+  left_join(chisq) %>% 
+  select(die, sides, expected_rolls_per_side, roll_mean, expected_mean, chisq_result_0.05, chisq_p.value = p.value, test) %>% 
+  arrange(sides)
 
-x <- rnorm(50)
-y <- runif(30)
-# Do x and y come from the same distribution?
-ks.test(x, y)
-# Does x come from a shifted gamma distribution with shape 3 and rate 2?
-ks.test(x+2, "pgamma", 3, 2) # two-sided, exact
-ks.test(x+2, "pgamma", 3, 2, exact = FALSE)
-ks.test(x+2, "pgamma", 3, 2, alternative = "gr")
-runif(20, 1, 20)
-dunif(20, 1, 20)
-var(runif(10000))  #- ~ = 1/12 = .08333
+
+
+
 
 ```
 
