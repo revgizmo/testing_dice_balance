@@ -1,10 +1,7 @@
-# (PART) Analysis of Title {-}
+##Analyze the results of u/VaraNiN’s dice rolls
+### Testing the dice for balance based on rolls and expected values
 
-#Analyze Title
 
-Information as of `r report_date`
-
-##Analysis of Title - \newline subtitle
 
 ```{r combined_Load, dependson = "Transform", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -54,7 +51,6 @@ report_names_class <- tibble( "names" = names(report), "class" = map(report, cla
 
 
 
-##Combined Rolls Analysis - load responses
 
 ```{r convert_report_to_combined, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -68,15 +64,15 @@ if (name_token != "") {name_token <- paste0( name_token, "_")}
 
 
 #special columns that aren't factors by should be included in charts/grapsh, etc.
-special_cols <- c( 1:2)
+# special_cols <- c( 1:2)
 
-report_names_class %>%
-  rownames_to_column() %>%
-  mutate(special_cols = rowname %in% special_cols,
-         col_num_name = paste0(rowname, " - ", names)
-         ) %>%
-  filter(special_cols == T) %>%
-  .$col_num_name
+# report_names_class %>%
+#   rownames_to_column() %>%
+#   mutate(special_cols = rowname %in% special_cols,
+#          col_num_name = paste0(rowname, " - ", names)
+#          ) %>%
+#   filter(special_cols == T) %>%
+#   .$col_num_name
 
 
 report_responses_num <- nrow(report)
@@ -88,85 +84,7 @@ report_responses_num <- nrow(report)
 
 
 
-
-##Analysis of Dice Rolls
-
-
-#### Thoughts
-* Thoughts go here
-
-
-
-
-#Analysis - Histograms
-
-##Generate Histograms/Bar Charts for all categorical variables (Factors) and select additional columns
-
-```{r combined_Histograms, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
-
-# Histograms -------------------------------------------------
-
-#apply factor levels to all columns that fit within each levels values
-
-
-#for (i in 122) {
-#for (i in 27) {
-for (i in 1:ncol(report)) {
-
-  if ( is.factor(report[[i]]) | i %in% special_cols ) {
-
-    x_col <- report %>%
-      select(i) %>%
-      names(.) %>%
-      str_replace_all("/", "")
-
-    x_col_trim <- x_col %>%
-      strtrim(25)
-
-    y_lim_max <- report %>%
-      count(.[[i]]) %>%
-      mutate(max = max(n)) %>%
-      count(max) %>%
-      .$max * 1.05
-
-    y_breaks <- (y_lim_max / 4 * 1:4) %/% 25 * 25
-
-    x_plot <- report %>%
-      ggplot(mapping = aes(x = report[[i]])) +
-      geom_bar(fill = my_fill_color) +
-      geom_text(stat = "count", aes(label = ..count.., y = ..count..), vjust = -1) +
-      scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-      scale_y_continuous(limit = c(0, y_lim_max), breaks = y_breaks) +
-      my_theme +
-      labs(x = x_col_trim,
-          title = wrapper(paste0( i, " - ", x_col, " (n = ", nrow(report), ")"), 90),
-          caption = report_info
-      )
-    # ggsave(paste0(output_folder, "/", name_token, i, "report_histogram_", str_replace_all(x_col_trim, pattern = "/", replacement = ""), ".png"))
-
-    print(x_plot)
-    print(paste0( i, " - ", x_col))
-  }
-}
-
-rm(list = c("x_col",
-            "x_col_trim",
-            "x_plot",
-            "y_breaks" ))
-
-report %>%
-  ggplot(mapping = aes(x = rolls)) +
-  geom_bar(fill = my_fill_color) +
-  facet_wrap(~die, nrow = 3)
-
-
-```
-
-
-
-#Analysis - Chi-Square Tests
-
-```{r combined_pairwise_proportions, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r combined_analysis, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
 
 chisq <- report %>% 
@@ -175,8 +93,7 @@ chisq <- report %>%
   mutate(test = map(data, ~ chisq.test(.$n)), # S3 list-col
     tidied = map(test, tidy)) %>% 
   unnest(tidied, .drop = TRUE) %>% 
-  mutate(chisq_result_0.05 = if_else(p.value < 0.05, "Significant Difference", "Ok"),
-         test = round(p.value,2)
+  mutate(chisq_result_0.05 = if_else(p.value < 0.05, "Significant Difference", "Ok")
          )
 
 summary <- report %>%
@@ -187,7 +104,7 @@ summary <- report %>%
          expected_rolls_per_side = roll_num/sides,
          expected_mean = sides/2) %>% 
   left_join(chisq) %>% 
-  select(die, sides, expected_rolls_per_side, roll_mean, expected_mean, chisq_result_0.05, chisq_p.value = p.value, test) %>% 
+  select(die, sides, roll_num, expected_rolls_per_side, roll_mean, expected_mean, chisq_p.value = p.value, chisq_result_0.05) %>% 
   arrange(sides)
 
 
@@ -198,12 +115,46 @@ summary <- report %>%
 
 
 
-##Pairwise comparisons of key variables Overall_Satisfaction
+
+
+
+
+
+```{r combined_Histograms, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+
+
+report %>%
+  left_join(summary) %>% 
+  mutate(sides = as.integer(sub("D","",die))) %>% 
+  arrange(sides) %>% 
+  ggplot(mapping = aes(x = rolls)) +
+  geom_bar(fill = my_fill_color) +
+  geom_hline(aes(yintercept = expected_rolls_per_side)) +
+  facet_wrap(~sides, nrow = 3) +
+  labs(x = "Die face rolled, \n*horizontal line is the expected rolls per side",
+       title = "Count of rolls per die side, organized by die"
+       ) +
+  my_theme
+
+
+
+```
+
+
+
+
+### Chi-Square analysis based on rolls and expected values
 
 ```{r combined_pairwise_Overall_Satisfaction, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
 
 # Pairwise by Overall_Satisfaction -----------------------------------------------------------
+summary %>% 
+  mutate(roll_mean = round(roll_mean, 1),
+         chisq_p.value = round(chisq_p.value,2)
+         ) %>% 
+  knitr::kable()
 
 # plot_calc_pairs(df = report, x = Column, y3 = Overall_Satisfaction, ex_label = '')
 
@@ -212,47 +163,12 @@ summary <- report %>%
 
 
 
+##Conclusions: The dice look balanced
 
-<!-- Clean up Pairwise calcs ------------------------------------------------- -->
+With all p-values > 0.05, the first pass analysis results in a colloquial conclusion* that the dice are balanced.  
+* lots of exceptions, details, and better explainations.  
 
-```{r combined_pairwise_clean_up, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
-
-# 
-# # Clean up Pairwise calcs -------------------------------------------------
-# 
-# rm(list = c("plot_calc_Completed_Quarter",
-#             "plot_calc_LTR",
-#             "plot_calc_NPS",
-#             "plot_calc_OSAT",
-#             "plot_calc_Relationship_Officer",
-#             "plot_calc_report_Phase",
-#             "report_rm"))
+##Future thoughts: 
+I'm less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis.  The variable representing the dice sides can move along the variable continuoum from Nominal to Ratio based on use in various games.  In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20.  A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern.  But that's a conversation for another time.
 
 
-```
-
-
-
-
-
-#Analysis - Clean up and print final notes
-
-```{r combined_final, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
-
-# Clean up and print final notes ------------------------------------------
-
-# rm(list = c("i",
-#             "j",
-#             "my_fill_color",
-#             "my_theme",
-#             "name_token",
-#             "output_folder",
-#             ))
-# 
-# print("04_Analyse")
-# warnings()
-```
-
-
-
-##End

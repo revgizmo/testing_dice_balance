@@ -1,10 +1,7 @@
-#Transform the files for analysis
+##Transforming the files for analysis
 
-Information as of `r report_date`
+To streamline the analysis, I consolidated the 6 groups of die rolls together into 1 tibble.
 
-
-
-##Transform Title
 
 ```{r Transform, dependson = "Tidy_final", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -30,6 +27,9 @@ library(tidyverse)
 
 
 # Load the tidy-ed data ----
+
+read_path <- "./data/"
+read_name_start <- "D"
 
 #D20
 die_sides = 20
@@ -81,7 +81,9 @@ combined_rolls <- combined_rolls %>%
 
 
 combined_rolls %>% 
-  count(die) %>% 
+  mutate(sides = as.integer(sub("D","",die))) %>%
+  count(sides, die) %>% 
+  select(-sides) %>% 
   knitr::kable()
 
 
@@ -96,24 +98,15 @@ combined_rolls %>%
 
 
 
-report_responses_num <- 0
-# report_responses_num <- report %>% nrow()
-report_response_earliest <- 0
-# report_response_earliest <- min(parse_datetime(report[["Completed_Date"]], "%m/%d/%Y %H:%M:%S %p" ))
-report_response_latest <- 0
-# report_response_latest <- max(parse_datetime(report[["Completed_Date"]], "%m/%d/%Y %H:%M:%S %p" ))
+report_responses_num <- combined_rolls %>% nrow()
+
 
 
 
 ```
 
-**`r report_responses_num`** responses were prepared for analysis.
-Responses range from **`r report_response_earliest`** to **`r report_response_latest`**.
+**`r report_responses_num`** die rolls were prepared for analysis.
 
-
-
-
-###Cleanup
 
 ```{r Transform_cleanup, dependson = "Transform", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 

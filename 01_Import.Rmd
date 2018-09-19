@@ -1,10 +1,11 @@
-# (PART) Prepare the data {-}
+##Importing the data
 
-#Import raw files
+The data was posted in an Excel file on google drive ([test roll results](https://drive.google.com/file/d/1oFhszSd7A210-YbTaEfz89A1eM7QgK5U/view?usp=sharing)). A quick test with the googlesheets package convinced me that I was better off just downloading the excel file.  I saved it in a ./data/raw/ folder.
 
-Information as of `r report_date`
+### File Format
+The Excel file consisted of 6 tabs, one for each die being tested.  Data was organized in a very excel fashion, with data and calculations included on the same tabs, and the data listed in cells A5:... It took a little creativity to get the right cells, and there were just enough tabs to copy/paste rather than building a formula to do it this time.
 
-##Import Title data
+###Import
 
 ```{r Import, cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -137,13 +138,26 @@ read_xlsx(read_path_name_file,
 
 #print(paste0(responses_num, " responses recorded for analysis, saved as ", write_path_name_responses))
 
-
+# responses <- ls()[9:14]
+# 
+# for (i in 1:6) {
+#   test[i] <- paste0("* ", responses[i], ": **`r ", responses[i], "`** rolls recorded")
+# }
+# test
 
 ```
 
-**`r responses_num`** responses recorded for analysis, 
+I imported each sheet separately and saved just the data into 6 separate .csv files.  I like to do this so that tidying begins on a standard and fixed set of data.
 
-Responses were saved as .csv files 
+
+* d4: **`r responses_num_d4`** rolls recorded
+* d6: **`r responses_num_d6`** rolls recorded   
+* d8: **`r responses_num_d8`** rolls recorded
+* d10: **`r responses_num_d10`** rolls recorded 
+* d12: **`r responses_num_d12`** rolls recorded
+* d20: **`r responses_num_d20`** rolls recorded
+
+That's a total of **`r responses_num_d4 + responses_num_d6 + responses_num_d8 + responses_num_d10 + responses_num_d12 + responses_num_d20`** rolls recorded.
 
 
 
@@ -171,7 +185,7 @@ import_warnings <- warnings()
 
 ```
 
-There were **`r length(import_warnings)`** warnings during the import.  They were:
+Warnings: There were **`r length(import_warnings)`** warnings during the import.  They were:
 `r import_warnings` 
 
 

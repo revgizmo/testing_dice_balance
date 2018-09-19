@@ -1,13 +1,5 @@
-#Tidy the data
+##Tidying the data
 
-Information as of `r report_date`
-
-
-
-
-##Tidy Title data
-
-Run Tidy on Title
 
 ```{r Tidy_Load, dependson = "Import", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -119,7 +111,6 @@ d4 <- read_csv(read_path_name,
 Data tidying was handled during Import (dice roll detail values were selected from within a more comprehensive spreadsheet that included summaries and analysis).  Traditional datawrangling was not necessary.
 
 
-###Tidy - Clean up and print final notes
 
 ```{r Tidy_final, dependson = "Tidy_target", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -169,7 +160,7 @@ tidy_warnings <- warnings()
 ```
 
 
-Responses were saved as "tidy.rds"
+Responses were saved as .rds files.
 
 
 There were **`r length(tidy_warnings)`** warnings during the data tidying.  They were:
