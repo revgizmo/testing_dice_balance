@@ -47,6 +47,7 @@
 
 
 
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
 
 
 
@@ -195,82 +196,196 @@
 </div>
 <div id="chi-square-analysis-based-on-rolls-and-expected-values" class="section level3">
 <h3><span class="header-section-number">1.5.2</span> Chi-Square analysis based on rolls and expected values</h3>
-<table>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:100%; overflow-x: scroll; width:100%; ">
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">die</th>
-<th align="right">sides</th>
-<th align="right">roll_num</th>
-<th align="right">expected_rolls_per_side</th>
-<th align="right">roll_mean</th>
-<th align="right">expected_mean</th>
-<th align="right">chisq_p.value</th>
-<th align="left">chisq_result_0.05</th>
+<tr>
+<th style="text-align:left;">
+die
+</th>
+<th style="text-align:right;">
+sides
+</th>
+<th style="text-align:right;">
+roll_num
+</th>
+<th style="text-align:right;">
+expected_rolls_per_side
+</th>
+<th style="text-align:right;">
+roll_mean
+</th>
+<th style="text-align:right;">
+expected_mean
+</th>
+<th style="text-align:right;">
+chisq_p.value
+</th>
+<th style="text-align:left;">
+chisq_result_0.05
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">D4</td>
-<td align="right">4</td>
-<td align="right">80</td>
-<td align="right">20</td>
-<td align="right">2.5</td>
-<td align="right">2</td>
-<td align="right">0.96</td>
-<td align="left">Ok</td>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.96
+</td>
+<td style="text-align:left;">
+Ok
+</td>
 </tr>
-<tr class="even">
-<td align="left">D6</td>
-<td align="right">6</td>
-<td align="right">120</td>
-<td align="right">20</td>
-<td align="right">3.5</td>
-<td align="right">3</td>
-<td align="right">0.35</td>
-<td align="left">Ok</td>
+<tr>
+<td style="text-align:left;">
+D6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.35
+</td>
+<td style="text-align:left;">
+Ok
+</td>
 </tr>
-<tr class="odd">
-<td align="left">D8</td>
-<td align="right">8</td>
-<td align="right">160</td>
-<td align="right">20</td>
-<td align="right">4.7</td>
-<td align="right">4</td>
-<td align="right">0.41</td>
-<td align="left">Ok</td>
+<tr>
+<td style="text-align:left;">
+D8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0.41
+</td>
+<td style="text-align:left;">
+Ok
+</td>
 </tr>
-<tr class="even">
-<td align="left">D10</td>
-<td align="right">10</td>
-<td align="right">200</td>
-<td align="right">20</td>
-<td align="right">5.2</td>
-<td align="right">5</td>
-<td align="right">0.21</td>
-<td align="left">Ok</td>
+<tr>
+<td style="text-align:left;">
+D10
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+200
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:left;">
+Ok
+</td>
 </tr>
-<tr class="odd">
-<td align="left">D12</td>
-<td align="right">12</td>
-<td align="right">240</td>
-<td align="right">20</td>
-<td align="right">6.6</td>
-<td align="right">6</td>
-<td align="right">0.23</td>
-<td align="left">Ok</td>
+<tr>
+<td style="text-align:left;">
+D12
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+240
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+<td style="text-align:left;">
+Ok
+</td>
 </tr>
-<tr class="even">
-<td align="left">D20</td>
-<td align="right">20</td>
-<td align="right">600</td>
-<td align="right">30</td>
-<td align="right">10.5</td>
-<td align="right">10</td>
-<td align="right">0.98</td>
-<td align="left">Ok</td>
+<tr>
+<td style="text-align:left;">
+D20
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+600
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+10.5
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0.98
+</td>
+<td style="text-align:left;">
+Ok
+</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 <div id="conclusions-the-dice-look-balanced" class="section level2">
