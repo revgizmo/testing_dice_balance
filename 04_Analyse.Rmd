@@ -90,7 +90,7 @@ report_responses_num <- nrow(report)
 chisq <- report %>% 
   count(die,rolls) %>% 
   nest(-die) %>%
-  mutate(test = map(data, ~ chisq.test(.$n)), # S3 list-col
+  mutate(test = map(data, ~ chisq.test(.$n)), 
     tidied = map(test, tidy)) %>% 
   unnest(tidied, .drop = TRUE) %>% 
   mutate(chisq_result_0.05 = if_else(p.value < 0.05, "Significant Difference", "Ok")
@@ -102,7 +102,7 @@ summary <- report %>%
             roll_mean = mean(rolls)) %>% 
   mutate(sides = as.integer(sub("D","",die)),
          expected_rolls_per_side = roll_num/sides,
-         expected_mean = sides/2) %>% 
+         expected_mean = (sides + 1 ) /2) %>% 
   left_join(chisq) %>% 
   select(die, sides, roll_num, expected_rolls_per_side, roll_mean, expected_mean, chisq_p.value = p.value, chisq_result_0.05) %>% 
   arrange(sides)
@@ -168,9 +168,9 @@ summary %>%
 ##Conclusions: The dice look balanced
 
 With all p-values > 0.05, the first pass analysis results in a colloquial conclusion* that the dice are balanced.  
-* lots of exceptions, details, and better explainations.  
+* lots of exceptions, details, and better explanations.  
 
 ##Future thoughts: 
-I'm less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis.  The variable representing the dice sides can move along the variable continuoum from Nominal to Ratio based on use in various games.  In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20.  A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern.  But that's a conversation for another time.
+I'm less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis.  The variable representing the dice sides can move along the variable continuum from Nominal to Ratio based on use in various games.  In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20.  A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern.  The D12 graph above shows a potential example, with quite a few more 20s rolled than 1s.  But that's a conversation and analysis for another time.
 
 
