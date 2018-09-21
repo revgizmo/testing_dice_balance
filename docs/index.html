@@ -106,9 +106,9 @@
 <h1><span class="header-section-number">1</span> Thoughts on u/VaraNiN’s dice</h1>
 <div id="a-small-project-to-test-dice-for-balance-based-on-rolls-and-expected-values" class="section level2">
 <h2><span class="header-section-number">1.1</span> A small project to test dice for balance based on rolls and expected values</h2>
-<p><a href="https://www.reddit.com/user/VaraNiN">u/VaraNiN</a>’s recent post on Reddit about receiving some new dice (<a href="https://www.reddit.com/r/DnD/comments/9g5gge/oc_after_9_weeks_of_waiting_my_steel_dice_are/?st=JM450M1H&amp;sh=090282a1">[OC] After 9 weeks of waiting my steel dice are finally here! (Test roll results inside)</a>) got me thinking about ways to capture fairness of dice rolls in R. <a href="https://www.reddit.com/user/VaraNiN">u/VaraNiN</a> kindly provided a simple analysis of <a href="https://drive.google.com/file/d/1oFhszSd7A210-YbTaEfz89A1eM7QgK5U/view?usp=sharing">test roll results</a> with the associated detailed die rolls in his post, so here’s a quick summary.</p>
-<div id="tldr-the-dice-look-balanced." class="section level4">
-<h4><span class="header-section-number">1.1.0.1</span> Tl;dr: The dice look balanced.</h4>
+<p><a href="https://www.reddit.com/user/VaraNiN">u/VaraNiN</a>’s recent post on Reddit about receiving some new dice (<a href="https://www.reddit.com/r/DnD/comments/9g5gge/oc_after_9_weeks_of_waiting_my_steel_dice_are/?st=JM450M1H&amp;sh=090282a1">[OC] After 9 weeks of waiting my steel dice are finally here! (Test roll results inside)</a>, since removed due to the dice pic) got me thinking about ways to capture fairness of dice rolls in R. <a href="https://www.reddit.com/user/VaraNiN">u/VaraNiN</a> kindly provided a simple analysis of <a href="https://drive.google.com/file/d/1oFhszSd7A210-YbTaEfz89A1eM7QgK5U/view?usp=sharing">test roll results</a> with the associated detailed die rolls in his post, so here’s a quick summary.</p>
+<div id="tldr-the-dice-look-balanced.-i-would-want-to-look-at-the-1s-and-20s-a-little-more-if-i-were-going-to-do-more-analysis." class="section level4">
+<h4><span class="header-section-number">1.1.0.1</span> Tl;dr: The dice look balanced. I would want to look at the 1s and 20s a little more if I were going to do more analysis.</h4>
 
 </div>
 </div>
@@ -244,7 +244,7 @@ D4
 2.5
 </td>
 <td style="text-align:right;">
-2
+2.5
 </td>
 <td style="text-align:right;">
 0.96
@@ -270,7 +270,7 @@ D6
 3.5
 </td>
 <td style="text-align:right;">
-3
+3.5
 </td>
 <td style="text-align:right;">
 0.35
@@ -296,7 +296,7 @@ D8
 4.7
 </td>
 <td style="text-align:right;">
-4
+4.5
 </td>
 <td style="text-align:right;">
 0.41
@@ -322,7 +322,7 @@ D10
 5.2
 </td>
 <td style="text-align:right;">
-5
+5.5
 </td>
 <td style="text-align:right;">
 0.21
@@ -348,7 +348,7 @@ D12
 6.6
 </td>
 <td style="text-align:right;">
-6
+6.5
 </td>
 <td style="text-align:right;">
 0.23
@@ -374,7 +374,7 @@ D20
 10.5
 </td>
 <td style="text-align:right;">
-10
+10.5
 </td>
 <td style="text-align:right;">
 0.98
@@ -391,11 +391,11 @@ Ok
 <div id="conclusions-the-dice-look-balanced" class="section level2">
 <h2><span class="header-section-number">1.6</span> Conclusions: The dice look balanced</h2>
 <p>With all p-values &gt; 0.05, the first pass analysis results in a colloquial conclusion* that the dice are balanced.<br />
-* lots of exceptions, details, and better explainations.</p>
+* lots of exceptions, details, and better explanations.</p>
 </div>
 <div id="future-thoughts" class="section level2">
 <h2><span class="header-section-number">1.7</span> Future thoughts:</h2>
-<p>I’m less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis. The variable representing the dice sides can move along the variable continuoum from Nominal to Ratio based on use in various games. In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20. A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern. But that’s a conversation for another time.</p>
+<p>I’m less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis. The variable representing the dice sides can move along the variable continuum from Nominal to Ratio based on use in various games. In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20. A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern. The D12 graph above shows a potential example, with quite a few more 20s rolled than 1s. But that’s a conversation and analysis for another time.</p>
 
 </div>
 </div>
