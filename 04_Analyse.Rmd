@@ -173,4 +173,87 @@ With all p-values > 0.05, the first pass analysis results in a colloquial conclu
 ##Future thoughts: 
 I'm less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis.  The variable representing the dice sides can move along the variable continuum from Nominal to Ratio based on use in various games.  In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20.  A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern.  The D12 graph above shows a potential example, with quite a few more 20s rolled than 1s.  But that's a conversation and analysis for another time.
 
+## Continuing exercise:
+Trying to model the power of the test.
+
+```{r trials, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+bias = 0. #percentage bias
+
+summary <- summary %>%
+  mutate(fair_side_perc = 1 / sides)
+         
+trials <- tribble()
+
+for (k in 0:10) {
+  
+  bias = k / 10
+  
+  for (j in 1:100) {
+    for (i in 1:nrow(summary)) {
+      trials <- sample(x = 1:summary$sides[i], 
+                       size = summary$roll_num[i], 
+                       replace = T, 
+                       prob = c(summary$fair_side_perc[i] * (1 + bias), 
+                                rep(summary$fair_side_perc[i], 
+                                    summary$sides[i] -2),
+                                summary$fair_side_perc[i] * (1 - bias))
+      ) %>%
+        as_tibble(.) %>% 
+        add_row(value = summary$sides[i]) %>% 
+        rename(rolls = value) %>% 
+        mutate(bias = bias,
+               trial = j,
+               die = paste0("D", summary$sides[i])) %>% 
+        bind_rows(trials)
+    }        
+  }
+}
+
+# trials %>% 
+#   count(trial, die) %>% 
+#   spread(trial, n)
+
+# report %>% 
+#   count(die,rolls) %>% 
+#   nest(-die)
+
+
+chisq_trials <- trials %>% 
+  count(die, bias, trial, rolls) %>% 
+  nest(-die, -trial, -bias) %>%
+  mutate(test = map(data, ~ chisq.test(.$n)), 
+    tidied = map(test, tidy)) %>% 
+  unnest(tidied, .drop = TRUE) %>% 
+  mutate(chisq_result_0.05 = if_else(p.value < 0.05, "Significant Difference", "Ok"),
+         detected = if_else(p.value < 0.05, 1, 0)
+         )
+
+summary_trials <- trials %>%
+  group_by(die, trial, bias) %>% 
+  summarize(roll_num = n(),
+            roll_mean = mean(rolls)) %>% 
+  mutate(sides = as.integer(sub("D","",die)),
+         expected_rolls_per_side = roll_num/sides,
+         expected_mean = (sides + 1 ) /2) %>% 
+  left_join(chisq_trials) %>% 
+  select(die, sides, bias, trial, roll_num, expected_rolls_per_side, roll_mean, expected_mean, chisq_p.value = p.value, chisq_result_0.05, detected) %>% 
+  arrange(sides)
+
+summary_trials %>% 
+  mutate(roll_mean = round(roll_mean, 1),
+         chisq_p.value = round(chisq_p.value,2)
+         ) %>% 
+  knitr::kable(format = "html") %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) %>% 
+  kableExtra::scroll_box(width = "100%", height = "100%")
+
+chisq_trials %>% 
+  group_by(bias, die) %>% 
+  mutate(detected_perc = sum(detected) / n()) %>% 
+  count(bias, die, detected_perc) %>% 
+  spread(bias, detected_perc)
+
+
+```
+
 
