@@ -173,6 +173,8 @@ With all p-values > 0.05, the first pass analysis results in a colloquial conclu
 ##Future thoughts: 
 I'm less concerned with misunderstanding of the implications of the p-values in this analysis, than I am with the conservative nature of the Chi-Square test for this kind of analysis.  The variable representing the dice sides can move along the variable continuum from Nominal to Ratio based on use in various games.  In the case of Dungeons and Dragons, the scale on the D20 is typically ordinal or interval from 2-19, with special exceptions for 1 and 20.  A dice that is imbalanced with respect to 1 or 20 in Dungeons and Dragons would be of particular concern.  The D12 graph above shows a potential example, with quite a few more 20s rolled than 1s.  But that's a conversation and analysis for another time.
 
+
+
 ## Continuing exercise:
 Trying to model the power of the test.
 
@@ -209,51 +211,94 @@ for (k in 0:10) {
   }
 }
 
-# trials %>% 
-#   count(trial, die) %>% 
-#   spread(trial, n)
-
-# report %>% 
-#   count(die,rolls) %>% 
-#   nest(-die)
+```
 
 
-chisq_trials <- trials %>% 
-  count(die, bias, trial, rolls) %>% 
-  nest(-die, -trial, -bias) %>%
-  mutate(test = map(data, ~ chisq.test(.$n)), 
-    tidied = map(test, tidy)) %>% 
-  unnest(tidied, .drop = TRUE) %>% 
-  mutate(chisq_result_0.05 = if_else(p.value < 0.05, "Significant Difference", "Ok"),
-         detected = if_else(p.value < 0.05, 1, 0)
-         )
+## Another reddit exercise:
 
-summary_trials <- trials %>%
-  group_by(die, trial, bias) %>% 
-  summarize(roll_num = n(),
-            roll_mean = mean(rolls)) %>% 
-  mutate(sides = as.integer(sub("D","",die)),
-         expected_rolls_per_side = roll_num/sides,
-         expected_mean = (sides + 1 ) /2) %>% 
-  left_join(chisq_trials) %>% 
-  select(die, sides, bias, trial, roll_num, expected_rolls_per_side, roll_mean, expected_mean, chisq_p.value = p.value, chisq_result_0.05, detected) %>% 
-  arrange(sides)
+[link](https://www.reddit.com/r/Rlanguage/comments/a8bc9v/please_help_me_to_create_a_function_of_8_sided/)
 
-summary_trials %>% 
-  mutate(roll_mean = round(roll_mean, 1),
-         chisq_p.value = round(chisq_p.value,2)
-         ) %>% 
-  knitr::kable(format = "html") %>% 
-  kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) %>% 
-  kableExtra::scroll_box(width = "100%", height = "100%")
+Please help me to create a function of 8 sided bias die ( the question is in below)
+Here is the question:
 
-chisq_trials %>% 
-  group_by(bias, die) %>% 
-  mutate(detected_perc = sum(detected) / n()) %>% 
-  count(bias, die, detected_perc) %>% 
-  spread(bias, detected_perc)
+Roll a 8-sided biased die repeatedly. Define the ‘bias’ by yourself. Starting with roll k =1, let Nk denote the result of roll k. If Nk > k, then you will roll again; otherwise you stop. Let R denote the number of rolls.
+Write a function: roll8( )
+input: n (trials)
+output: n outcomes and R value
+
+```{r roll8, dependson = "combined_Load", cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+roll8 <- function() {
+  Nk = 8
+  k = 1
+  R = 0
+  n = 0.
+  
+  bias = 0.125 #percentage bias
+  prob <- c(1/8 * (1 + bias), 
+            rep(1/8, #percentatage for fair sided die
+                8 -2), #number of fair sides in this analysis
+            1/8 * (1 - bias))
+  
+  
+  
+  while (Nk > k) {
+    Nk <- sample(x = 1:8, 
+                 size = 1, 
+                 prob = prob
+    )
+    R <- R + 1
+    n[R] <- Nk
+  }
+  
+  print(paste0("Rolls: ", R))
+  print("Results: ")
+  print(n)
+}
+
+
+roll8()
+
+roll8v2 <- function(trials) {
+  
+  n = 0 #create trial number vector
+  
+  bias = 0.125 #percentage bias
+  prob <- c(1/8 * (1 + bias), 
+            rep(1/8, #percentatage for fair sided die
+                8 -2), #number of fair sides in this analysis
+            1/8 * (1 - bias))
+  
+  
+  for (trial in 1:trials ) {
+    k = 1
+    R = 0
+    Nk = 8
+    
+    while (Nk > k) {
+      Nk <- sample(x = 1:8, 
+                   size = 1, 
+                   prob = prob
+      )
+      R <- R + 1
+    }
+    
+    print(paste0("trial ", trial, " rolls ", R))
+
+    n[trial] <- R
+
+  }
+
+  print("Results: ")
+  print(n)
+}
+
+
+roll8v2(3)
+
 
 
 ```
+
 
 
